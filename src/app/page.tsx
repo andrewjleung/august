@@ -78,7 +78,7 @@ type Chord = {
 
 function Position({ children }: { children?: React.ReactNode }) {
 	return (
-		<div className="h-20 flex flex-col items-center w-1">
+		<div className="h-16 flex flex-col items-center w-1">
 			<div className="w-1 h-full bg-black flex-initial" />
 			{children}
 			<div className="w-1 h-full bg-black flex-initial" />
@@ -95,10 +95,6 @@ function Fingering({
 	position,
 	fingering,
 }: { string: Note; position: number; fingering: Fingering }) {
-	if (fingering === undefined) {
-		return null;
-	}
-
 	return match(fingering)
 		.with({ type: "open" }, () => null)
 		.with({ type: "mute" }, () => null)
@@ -108,7 +104,7 @@ function Fingering({
 			}
 
 			return (
-				<div className="w-8 h-8 rounded-full outline outline-2 outline-black flex-none flex items-center justify-center">
+				<div className="w-8 h-8 rounded-full text-xl font-semibold bg-black text-white flex-none flex items-center justify-center">
 					{f.finger === undefined ? null : <span>{f.finger}</span>}
 				</div>
 			);
@@ -119,7 +115,7 @@ function Fingering({
 			}
 
 			return (
-				<div className="w-8 h-8 rounded-full outline outline-2 outline-black flex-none flex items-center justify-center">
+				<div className="w-8 h-8 rounded-full text-xl font-semibold bg-black text-white flex-none flex items-center justify-center">
 					{f.finger.finger === undefined ? null : (
 						<span>{f.finger.finger}</span>
 					)}
@@ -133,6 +129,18 @@ function GuitarString({ children }: { children: React.ReactNode }) {
 	return <div className="flex flex-col items-start">{children}</div>;
 }
 
+function StringLabel({ fingering }: { fingering: Fingering }) {
+	return (
+		<div className="h-10">
+			{match(fingering)
+				.with({ type: "mute" }, () => (
+					<span className="text-xl font-semibold">x</span>
+				))
+				.otherwise(() => null)}
+		</div>
+	);
+}
+
 function ChordChart({
 	guitar,
 	chord,
@@ -143,42 +151,76 @@ function ChordChart({
 	const count = useCounter();
 
 	return (
-		<div className="flex flex-row w-fit border-t-black border-t-4">
-			{guitar.strings.map((_, i) => {
-				const string = guitar.strings[i];
-				const fingering = chord.fingerings[i];
-				const isLastString = i === guitar.strings.length - 1;
-				const fretWidth = isLastString ? "w-1" : "w-10";
+		<div>
+			<span>{"E Major in the E form"}</span>
+			<div className="flex flex-row w-fit">
+				{guitar.strings.map((_, i) => {
+					const string = guitar.strings[i];
+					const fingering = chord.fingerings[i];
+					const isLastString = i === guitar.strings.length - 1;
+					const fretWidth = isLastString ? "w-1" : "w-12";
 
-				return (
-					<GuitarString key={`chord-${count}-string-${i}`}>
-						<Position>
-							<Fingering string={string} position={1} fingering={fingering} />
-						</Position>
-						<Fret className={fretWidth} />
-						<Position>
-							<Fingering string={string} position={2} fingering={fingering} />
-						</Position>
-						<Fret className={fretWidth} />
-						<Position>
-							<Fingering string={string} position={3} fingering={fingering} />
-						</Position>
-						<Fret className={fretWidth} />
-						<Position>
-							<Fingering string={string} position={4} fingering={fingering} />
-						</Position>
-						<Fret className={fretWidth} />
-						<Position>
-							<Fingering string={string} position={5} fingering={fingering} />
-						</Position>
-						<Fret className={fretWidth} />
-						<Position>
-							<Fingering string={string} position={6} fingering={fingering} />
-						</Position>
-						<Fret className={fretWidth} />
-					</GuitarString>
-				);
-			})}
+					return (
+						<div
+							className="flex flex-col items-start"
+							key={`chord-${count}-string-${i}`}
+						>
+							<GuitarString>
+								<StringLabel fingering={fingering} />
+								<Fret className={fretWidth} />
+								<Position>
+									<Fingering
+										string={string}
+										position={1}
+										fingering={fingering}
+									/>
+								</Position>
+								<Fret className={fretWidth} />
+								<Position>
+									<Fingering
+										string={string}
+										position={2}
+										fingering={fingering}
+									/>
+								</Position>
+								<Fret className={fretWidth} />
+								<Position>
+									<Fingering
+										string={string}
+										position={3}
+										fingering={fingering}
+									/>
+								</Position>
+								<Fret className={fretWidth} />
+								<Position>
+									<Fingering
+										string={string}
+										position={4}
+										fingering={fingering}
+									/>
+								</Position>
+								<Fret className={fretWidth} />
+								<Position>
+									<Fingering
+										string={string}
+										position={5}
+										fingering={fingering}
+									/>
+								</Position>
+								<Fret className={fretWidth} />
+								<Position>
+									<Fingering
+										string={string}
+										position={6}
+										fingering={fingering}
+									/>
+								</Position>
+								<Fret className={fretWidth} />
+							</GuitarString>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	);
 }
