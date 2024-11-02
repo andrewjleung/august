@@ -20,7 +20,7 @@ const STANDARD_TUNING_GUITAR: Guitar = {
 	numFrets: 22,
 };
 
-const CHORD = G_CHORD;
+const CHORD = D_CHORD;
 
 export default function Home() {
 	return (

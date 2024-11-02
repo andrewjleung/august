@@ -8,7 +8,7 @@ import {
 	type Guitar,
 	type NoteObject,
 } from "@/types";
-import { Chord, Note } from "@patrady/chord-js";
+import { Chord, MajorChord, Note } from "@patrady/chord-js";
 import clsx from "clsx";
 import { match } from "ts-pattern";
 
@@ -90,10 +90,12 @@ export function ChordChart({
 		.map((n) => n.name);
 
 	const chord = Chord.for(notes.join(" "));
+	const chordName = chord?.getName() || "Mystery chord!";
+	const chordNameWithoutInversion = chordName.split("/")[0];
 
 	return (
 		<div>
-			<span>{chord ? chord.getName() : "Mystery chord!"}</span>
+			<span>{chordNameWithoutInversion}</span>
 			<div className="flex flex-row w-fit">
 				{guitar.strings.map((_, i) => {
 					const string = guitar.strings[i];
